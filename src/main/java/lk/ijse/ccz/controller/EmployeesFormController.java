@@ -11,14 +11,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import lk.ijse.ccz.dao.custom.EmployeeDAO;
 import lk.ijse.ccz.model.Employee;
 import lk.ijse.ccz.model.tm.EmployeeTm;
-import lk.ijse.ccz.dao.Employee_Repo;
+import lk.ijse.ccz.dao.custom.impl.EmployeeDAOImpl;
 import javafx.scene.layout.AnchorPane;
 import lk.ijse.ccz.util.Regex;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeesFormController {
@@ -58,12 +58,10 @@ public class EmployeesFormController {
     @FXML
     private TextField txtPosition;
 
-
-    private List<Employee> employeeList = new ArrayList<>();
-
+    EmployeeDAO employeeDAO = new EmployeeDAOImpl();
 
     public void initialize() {
-        this.employeeList = getAllEmployee();
+        List<Employee> employeeList = getAllEmployee();
         setCellValueFactory();
         loadEmployeeTable();
 
@@ -73,7 +71,7 @@ public class EmployeesFormController {
         ObservableList<EmployeeTm> tmList = FXCollections.observableArrayList();
 
         try{
-            List<Employee> employeeList = Employee_Repo.getAll();
+            List<Employee> employeeList = employeeDAO.getAll();
             for (Employee employee : employeeList) {
                 EmployeeTm employeeTm = new EmployeeTm(
                         employee.getEmployeeID(),
@@ -102,7 +100,7 @@ public class EmployeesFormController {
     private List<Employee> getAllEmployee() {
         List<Employee> employeeList = null;
         try {
-            employeeList = Employee_Repo.getAll();
+            employeeList = employeeDAO.getAll();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -117,11 +115,9 @@ public class EmployeesFormController {
         String address = txtAddress.getText();
         String contact = txtContact.getText();
 
-        Employee employee = new Employee(id, name, email,address, contact);
-
         if(isValid()){
             try {
-                boolean isSaved = Employee_Repo.save(employee);
+                boolean isSaved = employeeDAO.save(new Employee(id, name, email,address, contact));
                 if (isSaved) {
                     new Alert(Alert.AlertType.CONFIRMATION, "employee saved!").show();
                     clearFields();
@@ -143,7 +139,7 @@ public class EmployeesFormController {
         String id = txtEmployeeId.getText();
 
         try {
-            boolean isDeleted = Employee_Repo.delete(id);
+            boolean isDeleted = employeeDAO.delete(id);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION, "employee deleted!").show();
                 loadEmployeeTable();
@@ -163,11 +159,9 @@ public class EmployeesFormController {
         String address = txtAddress.getText();
         String contact = txtContact.getText();
 
-        Employee employee = new Employee(id, name, email,address, contact);
-
         if (isValid()) {
             try {
-                boolean isSaved = Employee_Repo.update(employee);
+                boolean isSaved = employeeDAO.update(new Employee(id, name, email,address, contact));
                 if (isSaved) {
                     new Alert(Alert.AlertType.CONFIRMATION, "employee updated!").show();
                     clearFields();
@@ -208,7 +202,6 @@ public class EmployeesFormController {
     void contactOnKeyReleased(KeyEvent event) {
         Regex.setTextColor(lk.ijse.ccz.util.TextField.CONTACT,txtContact);
     }
-
 
     @FXML
     void employeeIdOnKeyReleased(KeyEvent event) {

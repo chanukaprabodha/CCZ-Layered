@@ -1,13 +1,14 @@
-package lk.ijse.ccz.dao;
+package lk.ijse.ccz.dao.custom.impl;
 
 import javafx.scene.chart.XYChart;
+import lk.ijse.ccz.dao.custom.OrderDAO;
 import lk.ijse.ccz.db.DbConnection;
 import lk.ijse.ccz.model.Order;
 
 import java.sql.*;
 
-public class Order_Repo {
-    public static String currentId() throws SQLException {
+public class OrderDAOImpl implements OrderDAO {
+    public String currentId() throws SQLException {
             String sql = "SELECT orderId FROM orders ORDER BY CAST(SUBSTRING(orderId, 2) AS UNSIGNED) DESC LIMIT 1";
 
             Connection connection = DbConnection.getInstance().getConnection();
@@ -20,7 +21,7 @@ public class Order_Repo {
             return null;
     }
 
-    public static int getUnitPrice(String recipe) throws SQLException {
+    public int getUnitPrice(String recipe) throws SQLException {
         String sql = "SELECT price FROM ingredient WHERE ing_name = ?";
 
         Connection connection = DbConnection.getInstance().getConnection();
@@ -34,7 +35,7 @@ public class Order_Repo {
         return 0;
     }
 
-    public static boolean save(Order order) throws SQLException {
+    public boolean save(Order order) throws SQLException {
         String sql = "INSERT INTO orders VALUES(?, ?, ?, ?)";
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
@@ -46,7 +47,7 @@ public class Order_Repo {
         return pstm.executeUpdate() > 0;
     }
 
-    public static XYChart.Series incomeChart(XYChart.Series chart) {
+    public XYChart.Series incomeChart(XYChart.Series chart) {
 
         String sql = "SELECT orderDate, SUM(totalAmount) FROM orders GROUP BY orderDate ORDER BY TIMESTAMP(orderDate)";
 
@@ -62,7 +63,7 @@ public class Order_Repo {
         return chart;
     }
 
-    public static XYChart.Series customerChart(XYChart.Series chart) {
+    public XYChart.Series customerChart(XYChart.Series chart) {
 
         String sql = "SELECT orderDate, COUNT(orderId) FROM orders GROUP BY orderDate ORDER BY TIMESTAMP(orderDate)";
 
@@ -78,7 +79,7 @@ public class Order_Repo {
         return chart;
     }
 
-    public static double getTodayIncome(Date sqlDate) throws SQLException {
+    public double getTodayIncome(Date sqlDate) throws SQLException {
 
         String sql = "SELECT SUM(totalAmount) FROM orders WHERE orderDate = ?";
 
@@ -91,7 +92,7 @@ public class Order_Repo {
         return 0;
     }
 
-    public static double getTotalIncome() throws SQLException {
+    public double getTotalIncome() throws SQLException {
 
         String sql = "SELECT SUM(totalAmount) FROM orders";
 
@@ -103,7 +104,7 @@ public class Order_Repo {
         return 0;
     }
 
-    public static int getTodayOrder(Date sqlDate) throws SQLException {
+    public int getTodayOrder(Date sqlDate) throws SQLException {
 
         String sql = "SELECT COUNT(orderId) FROM orders WHERE orderDate = ?";
 
@@ -116,7 +117,7 @@ public class Order_Repo {
         return 0;
     }
 
-    public static String getMostRecentOrderId() throws SQLException {
+    public String getMostRecentOrderId() throws SQLException {
         String sql = "select orderId from orders order by orderId desc limit 1";
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
         ResultSet resultSet = pstm.executeQuery();

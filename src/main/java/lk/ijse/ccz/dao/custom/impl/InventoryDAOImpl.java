@@ -1,5 +1,6 @@
-package lk.ijse.ccz.dao;
+package lk.ijse.ccz.dao.custom.impl;
 
+import lk.ijse.ccz.dao.custom.InventoryDAO;
 import lk.ijse.ccz.db.DbConnection;
 import lk.ijse.ccz.model.Inventory;
 import lk.ijse.ccz.model.OrderDetail;
@@ -10,9 +11,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Inventory_Repo {
+public class InventoryDAOImpl implements InventoryDAO {
 
-    public static boolean save(Inventory inventory) throws SQLException {
+    public  boolean save(Inventory inventory) throws SQLException {
         String sql = "INSERT INTO ingredient VALUES(?, ?, ?, ?)";
 
         try (PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql)) {
@@ -26,7 +27,7 @@ public class Inventory_Repo {
         }
     }
 
-    public static boolean delete(String id) throws SQLException {
+    public  boolean delete(String id) throws SQLException {
         String sql = "DELETE FROM ingredient WHERE ing_id = ?";
 
         try (PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql)) {
@@ -38,7 +39,7 @@ public class Inventory_Repo {
 
     }
 
-    public static boolean update(Inventory inventory) throws SQLException {
+    public  boolean update(Inventory inventory) throws SQLException {
         String sql = "UPDATE ingredient SET ing_name = ?, stock = ?, price = ? WHERE ing_id = ?";
 
         try (PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql)) {
@@ -53,7 +54,7 @@ public class Inventory_Repo {
 
     }
 
-    public static List<Inventory> getAll() throws SQLException {
+    public  List<Inventory> getAll() throws SQLException {
         String sql = "SELECT * FROM ingredient";
 
         PreparedStatement pstm = DbConnection.getInstance().getConnection()
@@ -75,7 +76,7 @@ public class Inventory_Repo {
 
     }
 
-    public static boolean updateQty(List<OrderDetail> odList) throws SQLException {
+    public  boolean updateQty(List<OrderDetail> odList) throws SQLException {
         for (OrderDetail od : odList) {
             if(!updateQty(od)) {
                 return false;
@@ -84,7 +85,7 @@ public class Inventory_Repo {
         return true;
     }
 
-    private static boolean updateQty(OrderDetail od) throws SQLException {
+    public   boolean updateQty(OrderDetail od) throws SQLException {
         String sql = "UPDATE ingredient SET stock = stock - ? WHERE ing_id = ?";
         try (PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql)) {
 
@@ -96,7 +97,7 @@ public class Inventory_Repo {
 
     }
 
-    public static double getUnitPrice(String recipe) throws SQLException {
+    public  double getUnitPrice(String recipe) throws SQLException {
         String sql = "SELECT price FROM ingredient WHERE ing_id = ?";
 
 
@@ -111,7 +112,7 @@ public class Inventory_Repo {
         return 0;
     }
 
-    public static String getProductId(String cellData) throws SQLException {
+    public  String getProductId(String cellData) throws SQLException {
         String sql = "SELECT ing_id FROM ingredient WHERE ing_name = ?";
 
         System.out.println(cellData);

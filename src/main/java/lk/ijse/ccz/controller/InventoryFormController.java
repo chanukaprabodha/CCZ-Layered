@@ -8,13 +8,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import lk.ijse.ccz.dao.custom.InventoryDAO;
 import lk.ijse.ccz.model.Inventory;
 import lk.ijse.ccz.model.tm.InventoryTm;
-import lk.ijse.ccz.dao.Inventory_Repo;
+import lk.ijse.ccz.dao.custom.impl.InventoryDAOImpl;
 import lk.ijse.ccz.util.Regex;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class InventoryFormController {
@@ -46,11 +46,11 @@ public class InventoryFormController {
     @FXML
     private TextField txtStock;
 
+    InventoryDAO inventoryDAO = new InventoryDAOImpl();
 
-    private List<Inventory> inventoryList = new ArrayList<>();
 
     public void initialize() {
-        this.inventoryList = getAllInventories();
+        List<Inventory> inventoryList = getAllInventories();
         setCellValueFactory();
         loadInventoryTable();
     }
@@ -67,7 +67,7 @@ public class InventoryFormController {
         ObservableList<InventoryTm> tmList = FXCollections.observableArrayList();
 
         try {
-            List<Inventory> inventoryList = Inventory_Repo.getAll();
+            List<Inventory> inventoryList = inventoryDAO.getAll();
             for (Inventory inventory : inventoryList) {
                 InventoryTm inventoryTm = new InventoryTm(
                         inventory.getId(),
@@ -94,7 +94,7 @@ public class InventoryFormController {
     private List<Inventory> getAllInventories() {
         List<Inventory> inventoryList = null;
         try {
-            inventoryList = Inventory_Repo.getAll();
+            inventoryList = inventoryDAO.getAll();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -115,11 +115,9 @@ public class InventoryFormController {
         double stock = Double.parseDouble(txtStock.getText());
         double price = Double.parseDouble(txtPrice.getText());
 
-        Inventory inventory = new Inventory(id, name, stock, price);
-
         if (isValid()){
             try {
-                boolean isSaved = Inventory_Repo.save(inventory);
+                boolean isSaved = inventoryDAO.save(new Inventory(id, name, stock, price));
                 if (isSaved){
                     new Alert(Alert.AlertType.CONFIRMATION, "Inventory saved!").show();
                     clearFields();
@@ -141,7 +139,7 @@ public class InventoryFormController {
         String id = txtProductID.getText();
 
         try {
-            boolean isDeleted = Inventory_Repo.delete(id);
+            boolean isDeleted = inventoryDAO.delete(id);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Inventory deleted!").show();
                 loadInventoryTable();
@@ -160,11 +158,9 @@ public class InventoryFormController {
         double stock = Double.parseDouble(txtStock.getText());
         double price = Double.parseDouble(txtPrice.getText());
 
-        Inventory inventory = new Inventory(id, name, stock, price);
-
         if (isValid()){
             try {
-                boolean isSaved = Inventory_Repo.update(inventory);
+                boolean isSaved = inventoryDAO.update(new Inventory(id, name, stock, price));
                 if (isSaved){
                     new Alert(Alert.AlertType.CONFIRMATION, "Inventory saved!").show();
                     clearFields();

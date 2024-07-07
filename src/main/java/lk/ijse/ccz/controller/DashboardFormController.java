@@ -16,8 +16,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import lk.ijse.ccz.dao.CustomerDAOImpl;
-import lk.ijse.ccz.dao.Order_Repo;
+import lk.ijse.ccz.dao.custom.CustomerDAO;
+import lk.ijse.ccz.dao.custom.impl.CustomerDAOImpl;
+import lk.ijse.ccz.dao.custom.OrderDAO;
+import lk.ijse.ccz.dao.custom.impl.OrderDAOImpl;
 
 import java.awt.*;
 import java.io.IOException;
@@ -59,12 +61,15 @@ public class DashboardFormController {
     @FXML
     private Label lblUsername;
 
+    CustomerDAO customerDAO = new CustomerDAOImpl();
+    OrderDAO orderDAO = new OrderDAOImpl();
+
     private void incomeChart(){
         incomeChart.getData().clear();
 
         XYChart.Series chart = new XYChart.Series();
 
-        XYChart.Series series = Order_Repo.incomeChart(chart);
+        XYChart.Series series = orderDAO.incomeChart(chart);
 
         incomeChart.getData().add(series);
     }
@@ -74,13 +79,13 @@ public class DashboardFormController {
 
         XYChart.Series chart = new XYChart.Series();
 
-        XYChart.Series series = Order_Repo.customerChart(chart);
+        XYChart.Series series = orderDAO.customerChart(chart);
 
         customerChart.getData().add(series);
     }
 
     private void lblNumOfCustomer() throws SQLException {
-        lblNumOfCustomer.setText(String.valueOf(CustomerDAOImpl.getCustomerCount()));
+        lblNumOfCustomer.setText(String.valueOf(customerDAO.getCustomerCount()));
     }
 
     private void lblTodayIncome() throws SQLException {
@@ -88,13 +93,13 @@ public class DashboardFormController {
 
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
 
-        double todayIncome = Order_Repo.getTodayIncome(sqlDate);
+        double todayIncome = orderDAO.getTodayIncome(sqlDate);
 
         lblTodayIncome.setText(String.valueOf("Rs. " + todayIncome));
     }
 
     private void lblTotalIncome() throws SQLException {
-        double totalIncome = Order_Repo.getTotalIncome();
+        double totalIncome = orderDAO.getTotalIncome();
         lblTotalIncome.setText(String.valueOf("Rs. " + totalIncome));
     }
 
@@ -103,7 +108,7 @@ public class DashboardFormController {
 
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
 
-        int ordersCount = Order_Repo.getTodayOrder(sqlDate);
+        int ordersCount = orderDAO.getTodayOrder(sqlDate);
 
         lblNumOfTodayOrders.setText(String.valueOf(ordersCount));
     }

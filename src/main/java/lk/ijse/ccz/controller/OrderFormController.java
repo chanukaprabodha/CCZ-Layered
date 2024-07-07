@@ -17,10 +17,17 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.ccz.dao.custom.ConfirmOrderDAO;
+import lk.ijse.ccz.dao.custom.CustomerDAO;
+import lk.ijse.ccz.dao.custom.InventoryDAO;
+import lk.ijse.ccz.dao.custom.OrderDAO;
+import lk.ijse.ccz.dao.custom.impl.ConfirmOrderImpl;
+import lk.ijse.ccz.dao.custom.impl.CustomerDAOImpl;
+import lk.ijse.ccz.dao.custom.impl.InventoryDAOImpl;
+import lk.ijse.ccz.dao.custom.impl.OrderDAOImpl;
 import lk.ijse.ccz.db.DbConnection;
 import lk.ijse.ccz.model.*;
 import lk.ijse.ccz.model.tm.OrderTm;
-import lk.ijse.ccz.dao.*;
 import lk.ijse.ccz.util.SendMail;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -37,8 +44,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.lang.Integer.parseInt;
-import static lk.ijse.ccz.util.SendMail.customerMailAddress;
-import static lk.ijse.ccz.util.SendMail.customerName;
+import static lk.ijse.ccz.util.SendMail.*;
 
 public class OrderFormController {
 
@@ -139,6 +145,11 @@ public class OrderFormController {
 
         private ObservableList<OrderTm> ordertList = FXCollections.observableArrayList();
 
+        CustomerDAO customerDAO = new CustomerDAOImpl();
+        OrderDAO orderDAO = new OrderDAOImpl();
+        InventoryDAO inventoryDAO = new InventoryDAOImpl();
+        ConfirmOrderDAO confirmOrderDAO = new ConfirmOrderImpl();
+
         public void initialize() {
                 setCellValueFactory();
                 loadNextOrderId();
@@ -184,7 +195,7 @@ public class OrderFormController {
 
         private void loadNextOrderId() {
                 try {
-                        String currentId = Order_Repo.currentId();
+                        String currentId = orderDAO.currentId();
                         String nextId = nextId(currentId);
                         lblOrderId.setText(nextId);
                 } catch (SQLException e) {
@@ -217,7 +228,7 @@ public class OrderFormController {
         @FXML
         void btnSearchOnAction(ActionEvent event) throws SQLException {
                 String mobile = txtSearchMobile.getText();
-                String cusId = CustomerDAOImpl.findCustomer(mobile);
+                String cusId = customerDAO.findCustomer(mobile);
                 if (cusId != null){
                         lblCustomerId.setText(cusId);
                 }else {
@@ -244,7 +255,7 @@ public class OrderFormController {
 
         private void allBtnOnAction(String ing_id, double qty) throws SQLException {
 
-                double unitPrice = Inventory_Repo.getUnitPrice(ing_id);
+                double unitPrice = inventoryDAO.getUnitPrice(ing_id);
                 double total = unitPrice * qty;
 
                 for (int i = 0; i < tblOrder.getItems().size(); i++) {
@@ -352,14 +363,12 @@ public class OrderFormController {
                         odList.add(od);
                 }
 
-                customerName = CustomerDAOImpl.getCustomerName(cusId);
+                customerName = customerDAO.getCustomerName(cusId);
+                customerMailAddress = customerDAO.getCustomerEmail(cusId);
 
-                customerMailAddress = CustomerDAOImpl.getCustomerEmail(cusId);
-
-                ConfirmOrder po = new ConfirmOrder(order, odList);
 
                 try {
-                        boolean isPlaced = ConfirmOrder_Repo.placeOrder(po);
+                        boolean isPlaced = confirmOrderDAO.placeOrder(new ConfirmOrder(order, odList));
                         if (isPlaced) {
                                 new Alert(Alert.AlertType.CONFIRMATION, "order placed!").show();
                                 tblOrder.getItems().clear();
@@ -367,17 +376,7 @@ public class OrderFormController {
                                 txtSearchMobile.clear();
                                 lblTotal.setText("0");
                                 loadNextOrderId();
-                                SendMail sendMail = new SendMail();
-
-                                sendMail.sendMail("Chamu Cake Zone Order Confirmation", "Hi " + customerName + ",\n\n" +
-                                        "\tThank you for shopping with us. " +
-                                        "Your order is confirmed. " +
-                                        "\n\tWe'll let you know when your order is ready 😊\n" +
-                                        "\n\tOrder Details:\n\n" +
-                                        "\t\t✅  Placed on :  " + date + "\n\n" +
-                                        "\t\t✅  Order ID :  " + orderId + "\n\n" +
-                                        "\t\t✅  Total Amount :  " + totalAmount + "\n" +
-                                        "\n\n\tSent with ❤️ from CCZ.\n\n");
+                                new SendMail().sending(date, orderId, totalAmount);
                         } else {
                                 new Alert(Alert.AlertType.WARNING, "order not placed!").show();
                         }
@@ -406,7 +405,7 @@ public class OrderFormController {
                 JasperReport jasperReport =
                         JasperCompileManager.compileReport(jasperDesign);
 
-                String orderId = Order_Repo.getMostRecentOrderId();
+                String orderId = orderDAO.getMostRecentOrderId();
 
                 Map<String, Object> parameter = new HashMap<>();
                 parameter.put("orderId", orderId);

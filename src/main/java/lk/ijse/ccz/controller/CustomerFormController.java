@@ -8,15 +8,14 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import lk.ijse.ccz.dao.CustomerDAO;
+import lk.ijse.ccz.dao.custom.CustomerDAO;
 import lk.ijse.ccz.model.Customer;
 import lk.ijse.ccz.model.tm.CustomerTm;
-import lk.ijse.ccz.dao.CustomerDAOImpl;
+import lk.ijse.ccz.dao.custom.impl.CustomerDAOImpl;
 import javafx.scene.control.cell.PropertyValueFactory;
 import lk.ijse.ccz.util.Regex;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerFormController {

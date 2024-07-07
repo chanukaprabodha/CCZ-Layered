@@ -1,5 +1,7 @@
-package lk.ijse.ccz.dao;
+package lk.ijse.ccz.dao.custom.impl;
 
+import lk.ijse.ccz.dao.SQLUtill;
+import lk.ijse.ccz.dao.custom.CustomerDAO;
 import lk.ijse.ccz.db.DbConnection;
 import lk.ijse.ccz.model.Customer;
 
@@ -12,19 +14,9 @@ import java.util.List;
 
 public class CustomerDAOImpl implements CustomerDAO {
 
-    public boolean save(Customer customer) throws SQLException {
-        String sql = "INSERT INTO customer VALUES(?, ?, ?, ?,?)";
+    public boolean save(Customer customer) throws SQLException, ClassNotFoundException {
 
-        try (PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql)) {
-
-            pstm.setObject(1, customer.getCustomerID());
-            pstm.setObject(2, customer.getName());
-            pstm.setObject(3, customer.getEmail());
-            pstm.setObject(4, customer.getAddress());
-            pstm.setObject(5, customer.getContact());
-
-            return pstm.executeUpdate() > 0;
-        }
+        return SQLUtill.execute("INSERT INTO customer VALUES(?, ?, ?, ?,?)", customer);
     }
 
     public boolean update(Customer customer) throws SQLException {

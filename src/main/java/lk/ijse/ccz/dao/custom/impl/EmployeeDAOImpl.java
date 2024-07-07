@@ -1,5 +1,6 @@
-package lk.ijse.ccz.dao;
+package lk.ijse.ccz.dao.custom.impl;
 
+import lk.ijse.ccz.dao.custom.EmployeeDAO;
 import lk.ijse.ccz.db.DbConnection;
 import lk.ijse.ccz.model.Employee;
 
@@ -9,9 +10,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Employee_Repo {
+public class EmployeeDAOImpl implements EmployeeDAO {
 
-    public static boolean save(Employee employee) throws SQLException {
+    public  boolean save(Employee employee) throws SQLException {
         String sql = "INSERT INTO employee VALUES(?, ?, ?, ?,?)";
 
         try (PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql)) {
@@ -26,7 +27,7 @@ public class Employee_Repo {
         }
     }
 
-    public static boolean delete(String id) throws SQLException {
+    public  boolean delete(String id) throws SQLException {
         String sql = "DELETE FROM employee WHERE employeeId = ?";
 
         try (PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql)) {
@@ -38,7 +39,7 @@ public class Employee_Repo {
 
     }
 
-    public static boolean update(Employee employee) throws SQLException {
+    public  boolean update(Employee employee) throws SQLException {
         String sql = "UPDATE employee SET name = ?,position = ?, address = ?, contact = ? WHERE employeeId = ?";
 
         try (PreparedStatement pstm = DbConnection.getInstance().getConnection()
@@ -54,7 +55,7 @@ public class Employee_Repo {
         }
     }
 
-    public static List<Employee> getAll() throws SQLException {
+    public  List<Employee> getAll() throws SQLException {
         String sql = "SELECT * FROM employee";
 
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);

@@ -1,5 +1,6 @@
-package lk.ijse.ccz.dao;
+package lk.ijse.ccz.dao.custom.impl;
 
+import lk.ijse.ccz.dao.custom.OrderDetailDAO;
 import lk.ijse.ccz.db.DbConnection;
 import lk.ijse.ccz.model.OrderDetail;
 
@@ -7,9 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-public class OrderDetail_Repo {
+public class OrderDetailDAOImpl implements OrderDetailDAO {
 
-        public static boolean save(List<OrderDetail> odList) throws SQLException {
+    public  boolean save(List<OrderDetail> odList) throws SQLException {
             for (OrderDetail od : odList) {
                 if(!save(od)) {
                     return false;
@@ -18,7 +19,7 @@ public class OrderDetail_Repo {
             return true;
     }
 
-    private static boolean save(OrderDetail od) throws SQLException {
+    public   boolean save(OrderDetail od) throws SQLException {
         String sql = "INSERT INTO orderdetail VALUES(?, ?, ?, ?)";
         PreparedStatement pstm = DbConnection.getInstance().getConnection()
                 .prepareStatement(sql);

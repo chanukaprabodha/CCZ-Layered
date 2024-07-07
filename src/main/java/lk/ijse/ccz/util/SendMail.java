@@ -21,6 +21,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.*;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.Properties;
 import java.util.Set;
 
@@ -88,5 +89,17 @@ public class SendMail {
                 throw e;
             }
         }
+    }
+
+    public static void sending(Date date,String orderId,Double totalAmount) throws Exception {
+        sendMail("Chamu Cake Zone Order Confirmation", "Hi " + customerName + ",\n\n" +
+                "\tThank you for shopping with us. " +
+                "Your order is confirmed. " +
+                "\n\tWe'll let you know when your order is ready 😊\n" +
+                "\n\tOrder Details:\n\n" +
+                "\t\t✅  Placed on :  " + date + "\n\n" +
+                "\t\t✅  Order ID :  " + orderId + "\n\n" +
+                "\t\t✅  Total Amount :  " + totalAmount + "\n" +
+                "\n\n\tSent with ❤️ from CCZ.\n\n");
     }
 }
