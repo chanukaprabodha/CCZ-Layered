@@ -1,5 +1,4 @@
-package lk.ijse.ccz.model;
-
+package lk.ijse.ccz.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,12 +8,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 
-public class Employee {
-
-    private String employeeID;
+public class Customer {
+    private String customerID;
     private String name;
-    private String position;
+    private String email;
     private String address;
     private String contact;
-
 }

@@ -1,17 +1,18 @@
 package lk.ijse.ccz.model;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+import java.util.Date;
 
-public class OrderDetail {
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+
+public class OrderDTO {
     private String orderId;
-    private String ingredientId;
-    private double ingredientQty;
-    private double unitPrice;
+    private Date orderDate;
+    private String customerID;
+    private double totalAmount;
 }

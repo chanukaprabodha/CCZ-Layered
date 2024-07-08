@@ -8,10 +8,12 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import lk.ijse.ccz.dao.custom.CustomerDAO;
-import lk.ijse.ccz.model.Customer;
+import lk.ijse.ccz.bo.BOFactory;
+import lk.ijse.ccz.bo.custom.CustomerBO;
+import lk.ijse.ccz.bo.custom.impl.CustomerBOImpl;
+import lk.ijse.ccz.dao.DAOFactory;
+import lk.ijse.ccz.model.CustomerDTO;
 import lk.ijse.ccz.model.tm.CustomerTm;
-import lk.ijse.ccz.dao.custom.impl.CustomerDAOImpl;
 import javafx.scene.control.cell.PropertyValueFactory;
 import lk.ijse.ccz.util.Regex;
 
@@ -56,40 +58,40 @@ public class CustomerFormController {
     @FXML
     private TextField txtName;
 
-    CustomerDAO customerDAO = new CustomerDAOImpl();
+    CustomerBO customerBO = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
 
     public void initialize() {
-        List<Customer> customerList = getAllCustomers();
+        List<CustomerDTO> customerDTOList = getAllCustomers();
         setCellValueFactory();
         loadCustomerTable();
     }
 
-    private List<Customer> getAllCustomers() {
-        List<Customer> customerList = null;
+    private List<CustomerDTO> getAllCustomers() {
+        List<CustomerDTO> customerDTOList = null;
         try {
-            customerList = customerDAO.getAll();
-        } catch (SQLException e) {
+            customerDTOList = customerBO.getAll();
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return customerList;
+        return customerDTOList;
     }
 
     private void loadCustomerTable() {
         ObservableList<CustomerTm> tmList = FXCollections.observableArrayList();
         try {
-            List<Customer> customerList = customerDAO.getAll();
-            for (Customer customer : customerList) {
+            List<CustomerDTO> customerDTOList = customerBO.getAll();
+            for (CustomerDTO customerDTO : customerDTOList) {
                 CustomerTm customerTm = new CustomerTm(
-                        customer.getCustomerID(),
-                        customer.getName(),
-                        customer.getEmail(),
-                        customer.getAddress(),
-                        customer.getContact()
+                        customerDTO.getCustomerID(),
+                        customerDTO.getName(),
+                        customerDTO.getEmail(),
+                        customerDTO.getAddress(),
+                        customerDTO.getContact()
                 );
 
                 tmList.add(customerTm);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
         tblCustomer.setItems(tmList);
@@ -122,12 +124,12 @@ public class CustomerFormController {
 
         if (isValid()) {
             try {
-                boolean isSaved = customerDAO.save(new Customer(id, name, email,address, contact));
+                boolean isSaved = customerBO.save(new CustomerDTO(id, name, email,address, contact));
                 if (isSaved) {
                     new Alert(Alert.AlertType.CONFIRMATION, "customer saved!").show();
                     clearFields();
                 }
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             }
         }
@@ -144,12 +146,12 @@ public class CustomerFormController {
         String id = txtCustomerId.getText();
 
         try {
-            boolean isDeleted = customerDAO.delete(id);
+            boolean isDeleted = customerBO.delete(id);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION, "customer deleted!").show();
                 clearFields();
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
         loadCustomerTable();
@@ -165,12 +167,12 @@ public class CustomerFormController {
 
         if (isValid()) {
             try {
-                boolean isUpdated = customerDAO.update(new Customer(id, name,email , address, contact));
+                boolean isUpdated = customerBO.update(new CustomerDTO(id, name,email , address, contact));
                 if (isUpdated) {
                     new Alert(Alert.AlertType.CONFIRMATION, "customer updated!").show();
                     clearFields();
                 }
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             }
         }

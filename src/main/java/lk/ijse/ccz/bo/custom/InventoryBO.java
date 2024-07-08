@@ -1,14 +1,23 @@
-package lk.ijse.ccz.dao.custom;
+package lk.ijse.ccz.bo.custom;
 
-import lk.ijse.ccz.dao.CrudDAO;
+import lk.ijse.ccz.bo.SuperBO;
 import lk.ijse.ccz.entity.Inventory;
 import lk.ijse.ccz.model.InventoryDTO;
 import lk.ijse.ccz.model.OrderDetailDTO;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-public interface InventoryDAO extends CrudDAO<Inventory> {
+public interface InventoryBO extends SuperBO {
+
+    public  boolean save(InventoryDTO inventoryDTO) throws SQLException, ClassNotFoundException;
+
+    public  boolean delete(String id) throws SQLException, ClassNotFoundException;
+
+    public  boolean update(InventoryDTO inventoryDTO) throws SQLException, ClassNotFoundException;
+
+    public List<InventoryDTO> getAll() throws SQLException, ClassNotFoundException;
 
     public  boolean updateQty(List<OrderDetailDTO> odList) throws SQLException, ClassNotFoundException;
 

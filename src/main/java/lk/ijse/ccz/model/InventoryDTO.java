@@ -4,13 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 
-public class ConfirmOrder {
-    private OrderDTO orderDTO;
-    private List<OrderDetailDTO> odList;
+public class InventoryDTO {
+
+    private String id;
+    private String name;
+    private double stock;
+    private double price;
+
 }

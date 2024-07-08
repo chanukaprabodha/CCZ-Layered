@@ -64,7 +64,7 @@ public class DashboardFormController {
     CustomerDAO customerDAO = new CustomerDAOImpl();
     OrderDAO orderDAO = new OrderDAOImpl();
 
-    private void incomeChart(){
+    private void incomeChart() throws SQLException, ClassNotFoundException {
         incomeChart.getData().clear();
 
         XYChart.Series chart = new XYChart.Series();
@@ -74,7 +74,7 @@ public class DashboardFormController {
         incomeChart.getData().add(series);
     }
 
-    private void customerChart(){
+    private void customerChart() throws SQLException, ClassNotFoundException {
         customerChart.getData().clear();
 
         XYChart.Series chart = new XYChart.Series();
@@ -84,11 +84,11 @@ public class DashboardFormController {
         customerChart.getData().add(series);
     }
 
-    private void lblNumOfCustomer() throws SQLException {
+    private void lblNumOfCustomer() throws SQLException, ClassNotFoundException {
         lblNumOfCustomer.setText(String.valueOf(customerDAO.getCustomerCount()));
     }
 
-    private void lblTodayIncome() throws SQLException {
+    private void lblTodayIncome() throws SQLException, ClassNotFoundException {
         Date date = new Date();
 
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
@@ -98,12 +98,12 @@ public class DashboardFormController {
         lblTodayIncome.setText(String.valueOf("Rs. " + todayIncome));
     }
 
-    private void lblTotalIncome() throws SQLException {
+    private void lblTotalIncome() throws SQLException, ClassNotFoundException {
         double totalIncome = orderDAO.getTotalIncome();
         lblTotalIncome.setText(String.valueOf("Rs. " + totalIncome));
     }
 
-    private void lblNumOfTodayOrders() throws SQLException {
+    private void lblNumOfTodayOrders() throws SQLException, ClassNotFoundException {
         Date date = new Date();
 
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
@@ -113,10 +113,10 @@ public class DashboardFormController {
         lblNumOfTodayOrders.setText(String.valueOf(ordersCount));
     }
 
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         setUserName();
-        incomeChart();
-        customerChart();
+        //incomeChart();
+        //customerChart();
         lblNumOfCustomer();
         lblTodayIncome();
         lblTotalIncome();
@@ -205,7 +205,7 @@ public class DashboardFormController {
     }
 
     @FXML
-    void dashBoardOnAction(ActionEvent event) throws IOException, SQLException {
+    void dashBoardOnAction(ActionEvent event) throws IOException, SQLException, ClassNotFoundException {
         FXMLLoader.load(this.getClass().getResource("/view/dashboard_form.fxml"));
 
         this.centerNode.getChildren().clear();

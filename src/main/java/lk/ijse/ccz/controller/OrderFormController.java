@@ -17,14 +17,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import lk.ijse.ccz.dao.custom.ConfirmOrderDAO;
-import lk.ijse.ccz.dao.custom.CustomerDAO;
-import lk.ijse.ccz.dao.custom.InventoryDAO;
-import lk.ijse.ccz.dao.custom.OrderDAO;
-import lk.ijse.ccz.dao.custom.impl.ConfirmOrderImpl;
-import lk.ijse.ccz.dao.custom.impl.CustomerDAOImpl;
-import lk.ijse.ccz.dao.custom.impl.InventoryDAOImpl;
-import lk.ijse.ccz.dao.custom.impl.OrderDAOImpl;
+import lk.ijse.ccz.bo.BOFactory;
+import lk.ijse.ccz.bo.custom.ConfirmOrderBO;
 import lk.ijse.ccz.db.DbConnection;
 import lk.ijse.ccz.model.*;
 import lk.ijse.ccz.model.tm.OrderTm;
@@ -145,10 +139,12 @@ public class OrderFormController {
 
         private ObservableList<OrderTm> ordertList = FXCollections.observableArrayList();
 
-        CustomerDAO customerDAO = new CustomerDAOImpl();
-        OrderDAO orderDAO = new OrderDAOImpl();
-        InventoryDAO inventoryDAO = new InventoryDAOImpl();
-        ConfirmOrderDAO confirmOrderDAO = new ConfirmOrderImpl();
+//        CustomerDAO customerDAO = new CustomerDAOImpl();
+//        OrderDAO orderDAO = new OrderDAOImpl();
+//        InventoryDAO inventoryDAO = new InventoryDAOImpl();
+//        ConfirmOrderDAO confirmOrderDAO = new ConfirmOrderImpl();
+
+        ConfirmOrderBO confirmOrderBO = (ConfirmOrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CONFIRM_ORDER);
 
         public void initialize() {
                 setCellValueFactory();
@@ -195,10 +191,10 @@ public class OrderFormController {
 
         private void loadNextOrderId() {
                 try {
-                        String currentId = orderDAO.currentId();
+                        String currentId = confirmOrderBO.currentId();
                         String nextId = nextId(currentId);
                         lblOrderId.setText(nextId);
-                } catch (SQLException e) {
+                } catch (SQLException | ClassNotFoundException e) {
                         throw new RuntimeException(e);
                 }
         }
@@ -226,9 +222,9 @@ public class OrderFormController {
         }
 
         @FXML
-        void btnSearchOnAction(ActionEvent event) throws SQLException {
+        void btnSearchOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
                 String mobile = txtSearchMobile.getText();
-                String cusId = customerDAO.findCustomer(mobile);
+                String cusId = confirmOrderBO.findCustomer(mobile);
                 if (cusId != null){
                         lblCustomerId.setText(cusId);
                 }else {
@@ -237,7 +233,7 @@ public class OrderFormController {
         }
 
         @FXML
-        void btnCoffeeOnAction(ActionEvent event) throws SQLException {
+        void btnCoffeeOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
                 String ing_id = "i003";
                 double qty = Double.parseDouble(txtCoffe.getText());
                 allBtnOnAction(ing_id, qty);
@@ -246,16 +242,16 @@ public class OrderFormController {
         }
 
         @FXML
-        void btnChocolateOnAction(ActionEvent event) throws SQLException {
+        void btnChocolateOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
                 String ing_id = "i002";
                 double qty = Double.parseDouble(txtChocolate.getText());
                 allBtnOnAction(ing_id, qty);
                 txtChocolate.clear();
         }
 
-        private void allBtnOnAction(String ing_id, double qty) throws SQLException {
+        private void allBtnOnAction(String ing_id, double qty) throws SQLException, ClassNotFoundException {
 
-                double unitPrice = inventoryDAO.getUnitPrice(ing_id);
+                double unitPrice = confirmOrderBO.getUnitPrice(ing_id);
                 double total = unitPrice * qty;
 
                 for (int i = 0; i < tblOrder.getItems().size(); i++) {
@@ -281,7 +277,7 @@ public class OrderFormController {
         }
 
         @FXML
-        void btnColoringOnAction(ActionEvent event) throws SQLException {
+        void btnColoringOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
                 String ing_id = "i006";
                 double qty = Double.parseDouble(txtcoloring.getText());
                 allBtnOnAction(ing_id, qty);
@@ -289,7 +285,7 @@ public class OrderFormController {
         }
 
         @FXML
-        void btnCupcakeOnAction(ActionEvent event) throws SQLException {
+        void btnCupcakeOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
                 String ing_id = "i004";
                 double qty = Double.parseDouble(txtcupcakes.getText());
                 allBtnOnAction(ing_id, qty);
@@ -297,7 +293,7 @@ public class OrderFormController {
         }
 
         @FXML
-        void btnEssenceOnAction(ActionEvent event) throws SQLException {
+        void btnEssenceOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
                 String ing_id = "i005";
                 double qty = Double.parseDouble(txtEssence.getText());
                 allBtnOnAction(ing_id, qty);
@@ -306,7 +302,7 @@ public class OrderFormController {
         }
 
         @FXML
-        void btnPackingOnAction(ActionEvent event) throws SQLException {
+        void btnPackingOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
                 String ing_id = "i009";
                 double qty = Double.parseDouble(txtPacking.getText());
                 allBtnOnAction(ing_id, qty);
@@ -314,7 +310,7 @@ public class OrderFormController {
         }
 
         @FXML
-        void btnVanillaOnAction(ActionEvent event) throws SQLException {
+        void btnVanillaOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
                 String ing_id = "i001";
                 double qty = Double.parseDouble(txtVanilla.getText());
                 allBtnOnAction(ing_id, qty);
@@ -323,7 +319,7 @@ public class OrderFormController {
         }
 
         @FXML
-        void btnTopperOnAction(ActionEvent event) throws SQLException {
+        void btnTopperOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
                 String ing_id = "i007";
                 double qty = Double.parseDouble(txtTopper.getText());
                 allBtnOnAction(ing_id, qty);
@@ -332,7 +328,7 @@ public class OrderFormController {
         }
 
         @FXML
-        void btnIcingOnAction(ActionEvent event) throws SQLException {
+        void btnIcingOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
                 String ing_id = "i008";
                 double qty = Double.parseDouble(txtIcing.getText());
                 allBtnOnAction(ing_id, qty);
@@ -340,21 +336,21 @@ public class OrderFormController {
         }
 
         @FXML
-        void btnConfirmOnAction(ActionEvent event) throws SQLException {
+        void btnConfirmOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
 
                 String orderId = lblOrderId.getText();
                 String cusId = lblCustomerId.getText();
                 Date date = Date.valueOf(LocalDate.now());
                 double totalAmount = Double.parseDouble(lblTotal.getText());
 
-                var order = new Order(orderId, date, cusId, totalAmount);
+                var order = new OrderDTO(orderId, date, cusId, totalAmount);
 
-                List<OrderDetail> odList = new ArrayList<>();
+                List<OrderDetailDTO> odList = new ArrayList<>();
 
                 for (int i = 0; i < tblOrder.getItems().size(); i++) {
                         OrderTm tm = ordertList.get(i);
 
-                        OrderDetail od = new OrderDetail(
+                        OrderDetailDTO od = new OrderDetailDTO(
                                 orderId,
                                 (String) colRecipe.getCellData(i),
                                 tm.getQuantity(),
@@ -363,12 +359,12 @@ public class OrderFormController {
                         odList.add(od);
                 }
 
-                customerName = customerDAO.getCustomerName(cusId);
-                customerMailAddress = customerDAO.getCustomerEmail(cusId);
+                customerName = confirmOrderBO.getCustomerName(cusId);
+                customerMailAddress = confirmOrderBO.getCustomerEmail(cusId);
 
 
                 try {
-                        boolean isPlaced = confirmOrderDAO.placeOrder(new ConfirmOrder(order, odList));
+                        boolean isPlaced = confirmOrderBO.placeOrder(new ConfirmOrder(order, odList));
                         if (isPlaced) {
                                 new Alert(Alert.AlertType.CONFIRMATION, "order placed!").show();
                                 tblOrder.getItems().clear();
@@ -399,13 +395,13 @@ public class OrderFormController {
         }
 
         @FXML
-        void btnprintLableOnAction(ActionEvent event) throws JRException, SQLException {
+        void btnprintLableOnAction(ActionEvent event) throws JRException, SQLException, ClassNotFoundException {
                 JasperDesign jasperDesign =
                         JRXmlLoader.load("src/main/resources/Report/kitchenLabel.jrxml");
                 JasperReport jasperReport =
                         JasperCompileManager.compileReport(jasperDesign);
 
-                String orderId = orderDAO.getMostRecentOrderId();
+                String orderId = confirmOrderBO.getMostRecentOrderId();
 
                 Map<String, Object> parameter = new HashMap<>();
                 parameter.put("orderId", orderId);
@@ -432,7 +428,7 @@ public class OrderFormController {
         }
 
         @FXML
-        void txtSearchFieldOnAction(ActionEvent event) throws SQLException {
+        void txtSearchFieldOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
                 btnSearchOnAction(event);
         }
 

@@ -14,7 +14,7 @@ public class DAOFactory {
     }
 
     public enum DAOTypes {
-        CUSTOMER,INVENTORY,ORDER, CONFIRM_ORDER,EMPLOYEE,ORDER_DETAIL
+        CUSTOMER,INVENTORY,ORDER,EMPLOYEE, CONFIRM_ORDER, ORDER_DETAIL
     }
 
     public SuperDAO getDAO(DAOTypes types){
@@ -25,8 +25,6 @@ public class DAOFactory {
                 return new InventoryDAOImpl();
             case ORDER:
                 return new OrderDAOImpl();
-            case CONFIRM_ORDER:
-                return new ConfirmOrderImpl();
             case EMPLOYEE:
                 return new EmployeeDAOImpl();
             case ORDER_DETAIL:

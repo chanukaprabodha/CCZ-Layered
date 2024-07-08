@@ -1,78 +1,36 @@
 package lk.ijse.ccz.dao.custom.impl;
 
+import lk.ijse.ccz.dao.SQLUtill;
 import lk.ijse.ccz.dao.custom.EmployeeDAO;
-import lk.ijse.ccz.db.DbConnection;
-import lk.ijse.ccz.model.Employee;
+import lk.ijse.ccz.entity.Employee;
+import lk.ijse.ccz.entity.OrderDetail;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
 
-    public  boolean save(Employee employee) throws SQLException {
-        String sql = "INSERT INTO employee VALUES(?, ?, ?, ?,?)";
-
-        try (PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql)) {
-
-            pstm.setObject(1, employee.getEmployeeID());
-            pstm.setObject(2, employee.getName());
-            pstm.setObject(3, employee.getPosition());
-            pstm.setObject(4, employee.getAddress());
-            pstm.setObject(5, employee.getContact());
-
-            return pstm.executeUpdate() > 0;
-        }
+    public  boolean save(Employee entity) throws SQLException, ClassNotFoundException {
+        return SQLUtill.execute("INSERT INTO employee VALUES(?, ?, ?, ?, ?)", entity.getEmployeeID(), entity.getName(), entity.getPosition(), entity.getAddress(), entity.getContact());
     }
 
-    public  boolean delete(String id) throws SQLException {
-        String sql = "DELETE FROM employee WHERE employeeId = ?";
-
-        try (PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql)) {
-
-            pstm.setObject(1, id);
-
-            return pstm.executeUpdate() > 0;
-        }
+    public  boolean delete(String id) throws SQLException, ClassNotFoundException {
+        return SQLUtill.execute("DELETE FROM employee WHERE employeeId = ?", id);
 
     }
 
-    public  boolean update(Employee employee) throws SQLException {
-        String sql = "UPDATE employee SET name = ?,position = ?, address = ?, contact = ? WHERE employeeId = ?";
-
-        try (PreparedStatement pstm = DbConnection.getInstance().getConnection()
-                .prepareStatement(sql)) {
-
-            pstm.setObject(1, employee.getName());
-            pstm.setObject(2, employee.getPosition());
-            pstm.setObject(3, employee.getAddress());
-            pstm.setObject(4, employee.getContact());
-            pstm.setObject(5, employee.getEmployeeID());
-
-            return pstm.executeUpdate() > 0;
-        }
+    public  boolean update(Employee entity) throws SQLException, ClassNotFoundException {
+        return SQLUtill.execute("UPDATE employee SET name = ?, position = ?, address = ?, phone = ? WHERE employeeId = ?", entity.getName(), entity.getPosition(), entity.getAddress(), entity.getContact(), entity.getEmployeeID());
     }
 
-    public  List<Employee> getAll() throws SQLException {
-        String sql = "SELECT * FROM employee";
-
-        PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
-
-        ResultSet resultSet = pstm.executeQuery();
-
-        List<Employee> employeeList = new ArrayList<>();
-        while (resultSet.next()) {
-            String id = resultSet.getString(1);
-            String name = resultSet.getString(2);
-            String position = resultSet.getString(3);
-            String address = resultSet.getString(4);
-            String contact = resultSet.getString(5);
-
-            Employee employee = new Employee(id, name, position, address, contact);
-            employeeList.add(employee);
+    public ArrayList<Employee> getAll() throws SQLException, ClassNotFoundException {
+        ArrayList<Employee> allEmployee = new ArrayList<>();
+        ResultSet rst = SQLUtill.execute("SELECT * FROM employee");
+        while (rst.next()){
+            Employee employee = new Employee(rst.getString(1),rst.getString(2),rst.getString(3),rst.getString(4),rst.getString(5));
+            allEmployee.add(employee);
         }
-        return employeeList;
+        return allEmployee;
     }
 }

@@ -8,11 +8,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 
-public class Inventory {
-
-    private String id;
+public class CustomerDTO {
+    private String customerID;
     private String name;
-    private double stock;
-    private double price;
-
+    private String email;
+    private String address;
+    private String contact;
 }

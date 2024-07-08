@@ -11,8 +11,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import lk.ijse.ccz.bo.BOFactory;
+import lk.ijse.ccz.bo.custom.EmployeeBO;
+import lk.ijse.ccz.dao.DAOFactory;
 import lk.ijse.ccz.dao.custom.EmployeeDAO;
-import lk.ijse.ccz.model.Employee;
+import lk.ijse.ccz.model.EmployeeDTO;
 import lk.ijse.ccz.model.tm.EmployeeTm;
 import lk.ijse.ccz.dao.custom.impl.EmployeeDAOImpl;
 import javafx.scene.layout.AnchorPane;
@@ -58,10 +61,10 @@ public class EmployeesFormController {
     @FXML
     private TextField txtPosition;
 
-    EmployeeDAO employeeDAO = new EmployeeDAOImpl();
+    EmployeeBO employeeBO = (EmployeeBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.EMPLOYEE);
 
     public void initialize() {
-        List<Employee> employeeList = getAllEmployee();
+        List<EmployeeDTO> employeeDTOList = getAllEmployee();
         setCellValueFactory();
         loadEmployeeTable();
 
@@ -71,18 +74,18 @@ public class EmployeesFormController {
         ObservableList<EmployeeTm> tmList = FXCollections.observableArrayList();
 
         try{
-            List<Employee> employeeList = employeeDAO.getAll();
-            for (Employee employee : employeeList) {
+            List<EmployeeDTO> employeeDTOList = employeeBO.getAll();
+            for (EmployeeDTO employeeDTO : employeeDTOList) {
                 EmployeeTm employeeTm = new EmployeeTm(
-                        employee.getEmployeeID(),
-                        employee.getName(),
-                        employee.getPosition(),
-                        employee.getAddress(),
-                        employee.getContact()
+                        employeeDTO.getEmployeeID(),
+                        employeeDTO.getName(),
+                        employeeDTO.getPosition(),
+                        employeeDTO.getAddress(),
+                        employeeDTO.getContact()
                 );
                 tmList.add(employeeTm);
             }
-        }catch (SQLException e){
+        }catch (SQLException | ClassNotFoundException e){
             throw new RuntimeException(e);
         }
 
@@ -97,14 +100,14 @@ public class EmployeesFormController {
         colContact.setCellValueFactory(new PropertyValueFactory<>("contact"));
     }
 
-    private List<Employee> getAllEmployee() {
-        List<Employee> employeeList = null;
+    private List<EmployeeDTO> getAllEmployee() {
+        List<EmployeeDTO> employeeDTOList = null;
         try {
-            employeeList = employeeDAO.getAll();
-        } catch (SQLException e) {
+            employeeDTOList = employeeBO.getAll();
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return employeeList;
+        return employeeDTOList;
     }
 
     @FXML
@@ -117,12 +120,12 @@ public class EmployeesFormController {
 
         if(isValid()){
             try {
-                boolean isSaved = employeeDAO.save(new Employee(id, name, email,address, contact));
+                boolean isSaved = employeeBO.save(new EmployeeDTO(id, name, email,address, contact));
                 if (isSaved) {
                     new Alert(Alert.AlertType.CONFIRMATION, "employee saved!").show();
                     clearFields();
                 }
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             }
         }
@@ -139,13 +142,13 @@ public class EmployeesFormController {
         String id = txtEmployeeId.getText();
 
         try {
-            boolean isDeleted = employeeDAO.delete(id);
+            boolean isDeleted = employeeBO.delete(id);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION, "employee deleted!").show();
                 loadEmployeeTable();
                 clearFields();
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
         loadEmployeeTable();
@@ -161,12 +164,12 @@ public class EmployeesFormController {
 
         if (isValid()) {
             try {
-                boolean isSaved = employeeDAO.update(new Employee(id, name, email,address, contact));
+                boolean isSaved = employeeBO.update(new EmployeeDTO(id, name, email,address, contact));
                 if (isSaved) {
                     new Alert(Alert.AlertType.CONFIRMATION, "employee updated!").show();
                     clearFields();
                 }
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             }
         }

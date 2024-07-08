@@ -2,7 +2,7 @@ CREATE DATABASE ccz;
 
 USE ccz;
 
-CREATE TABLE customer (
+CREATE TABLE customerDTO (
                           customerId VARCHAR(30) PRIMARY KEY,
                           name VARCHAR(255) NOT NULL,
                           email VARCHAR(255) UNIQUE,
@@ -16,7 +16,7 @@ CREATE TABLE orders (
                         orderDate DATE NOT NULL,
                         customerId VARCHAR(30) NOT NULL,
                         totalAmount double(10,2) not null,
-                        CONSTRAINT FOREIGN KEY (customerId) REFERENCES customer(customerId) ON UPDATE CASCADE ON DELETE CASCADE
+                        CONSTRAINT FOREIGN KEY (customerId) REFERENCES customerDTO(customerId) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE product (
@@ -60,14 +60,14 @@ CREATE TABLE recipe (
                         CONSTRAINT FOREIGN KEY (productId) REFERENCES product(productId) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-CREATE TABLE employee (
+CREATE TABLE employeeDTO (
                           employeeId VARCHAR(30) PRIMARY KEY,
                           name VARCHAR(255) NOT NULL,
                           position VARCHAR(255) NOT NULL,
                           address varchar(255) not null,
                           contact varchar(15) not null
 );
-INSERT INTO employee (employeeId,name,position,address,contact)
+INSERT INTO employeeDTO (employeeId,name,position,address,contact)
 VALUES
     ('e001','Dolby', 'Admin','testAdress', '0123456789' );
 
@@ -75,7 +75,7 @@ CREATE TABLE cardinality (
                              employeeId VARCHAR(30) NOT NULL,
                              userId VARCHAR(30) PRIMARY KEY,
                              Password VARCHAR(255) NOT NULL,
-                             CONSTRAINT FOREIGN KEY (employeeId) REFERENCES employee(employeeId) ON UPDATE CASCADE ON DELETE CASCADE
+                             CONSTRAINT FOREIGN KEY (employeeId) REFERENCES employeeDTO(employeeId) ON UPDATE CASCADE ON DELETE CASCADE
 );
 INSERT INTO cardinality (employeeId,userId,Password)
 VALUES

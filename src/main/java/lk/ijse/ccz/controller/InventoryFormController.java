@@ -8,8 +8,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import lk.ijse.ccz.bo.BOFactory;
+import lk.ijse.ccz.bo.custom.InventoryBO;
+import lk.ijse.ccz.dao.DAOFactory;
 import lk.ijse.ccz.dao.custom.InventoryDAO;
-import lk.ijse.ccz.model.Inventory;
+import lk.ijse.ccz.model.InventoryDTO;
 import lk.ijse.ccz.model.tm.InventoryTm;
 import lk.ijse.ccz.dao.custom.impl.InventoryDAOImpl;
 import lk.ijse.ccz.util.Regex;
@@ -46,11 +49,10 @@ public class InventoryFormController {
     @FXML
     private TextField txtStock;
 
-    InventoryDAO inventoryDAO = new InventoryDAOImpl();
-
+    InventoryBO inventoryBO = (InventoryBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.INVENTORY);
 
     public void initialize() {
-        List<Inventory> inventoryList = getAllInventories();
+        List<InventoryDTO> inventoryDTOList = getAllInventories();
         setCellValueFactory();
         loadInventoryTable();
     }
@@ -67,38 +69,38 @@ public class InventoryFormController {
         ObservableList<InventoryTm> tmList = FXCollections.observableArrayList();
 
         try {
-            List<Inventory> inventoryList = inventoryDAO.getAll();
-            for (Inventory inventory : inventoryList) {
+            List<InventoryDTO> inventoryDTOList = inventoryBO.getAll();
+            for (InventoryDTO inventoryDTO : inventoryDTOList) {
                 InventoryTm inventoryTm = new InventoryTm(
-                        inventory.getId(),
-                        inventory.getName(),
-                        inventory.getStock(),
-                        inventory.getPrice()
+                        inventoryDTO.getId(),
+                        inventoryDTO.getName(),
+                        inventoryDTO.getStock(),
+                        inventoryDTO.getPrice()
                 );
 
-                if(inventory.getStock()<= 2){
+                if(inventoryDTO.getStock()<= 2){
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Low Stock Warning");
-                    alert.setContentText("Stock of " + inventory.getName() + " is running low! (" + inventory.getStock() + " left)");
+                    alert.setContentText("Stock of " + inventoryDTO.getName() + " is running low! (" + inventoryDTO.getStock() + " left)");
                     alert.showAndWait();
                 }
 
                 tmList.add(inventoryTm);
             }
-        }catch (SQLException e) {
+        }catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
         tblInventory.setItems(tmList);
     }
 
-    private List<Inventory> getAllInventories() {
-        List<Inventory> inventoryList = null;
+    private List<InventoryDTO> getAllInventories() {
+        List<InventoryDTO> inventoryDTOList = null;
         try {
-            inventoryList = inventoryDAO.getAll();
-        } catch (SQLException e) {
+            inventoryDTOList = inventoryBO.getAll();
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return inventoryList;
+        return inventoryDTOList;
     }
 
     private void clearFields() {
@@ -117,12 +119,12 @@ public class InventoryFormController {
 
         if (isValid()){
             try {
-                boolean isSaved = inventoryDAO.save(new Inventory(id, name, stock, price));
+                boolean isSaved = inventoryBO.save(new InventoryDTO(id, name, stock, price));
                 if (isSaved){
                     new Alert(Alert.AlertType.CONFIRMATION, "Inventory saved!").show();
                     clearFields();
                 }
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             }
         }
@@ -139,13 +141,13 @@ public class InventoryFormController {
         String id = txtProductID.getText();
 
         try {
-            boolean isDeleted = inventoryDAO.delete(id);
+            boolean isDeleted = inventoryBO.delete(id);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Inventory deleted!").show();
                 loadInventoryTable();
                 clearFields();
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
         tblInventory.refresh();
@@ -160,12 +162,12 @@ public class InventoryFormController {
 
         if (isValid()){
             try {
-                boolean isSaved = inventoryDAO.update(new Inventory(id, name, stock, price));
+                boolean isSaved = inventoryBO.update(new InventoryDTO(id, name, stock, price));
                 if (isSaved){
                     new Alert(Alert.AlertType.CONFIRMATION, "Inventory saved!").show();
                     clearFields();
                 }
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             }
         }
