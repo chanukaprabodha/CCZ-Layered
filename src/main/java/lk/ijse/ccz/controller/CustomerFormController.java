@@ -10,10 +10,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import lk.ijse.ccz.bo.BOFactory;
 import lk.ijse.ccz.bo.custom.CustomerBO;
-import lk.ijse.ccz.bo.custom.impl.CustomerBOImpl;
-import lk.ijse.ccz.dao.DAOFactory;
-import lk.ijse.ccz.model.CustomerDTO;
-import lk.ijse.ccz.model.tm.CustomerTm;
+import lk.ijse.ccz.dto.CustomerDTO;
+import lk.ijse.ccz.dto.tm.CustomerTm;
 import javafx.scene.control.cell.PropertyValueFactory;
 import lk.ijse.ccz.util.Regex;
 

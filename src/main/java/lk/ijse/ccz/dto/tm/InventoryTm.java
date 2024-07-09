@@ -1,4 +1,4 @@
-package lk.ijse.ccz.model;
+package lk.ijse.ccz.dto.tm;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,11 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 
-public class InventoryDTO {
-
+public class InventoryTm {
     private String id;
     private String name;
     private double stock;
     private double price;
-
 }

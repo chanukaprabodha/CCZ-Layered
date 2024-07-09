@@ -10,11 +10,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import lk.ijse.ccz.bo.BOFactory;
 import lk.ijse.ccz.bo.custom.InventoryBO;
-import lk.ijse.ccz.dao.DAOFactory;
-import lk.ijse.ccz.dao.custom.InventoryDAO;
-import lk.ijse.ccz.model.InventoryDTO;
-import lk.ijse.ccz.model.tm.InventoryTm;
-import lk.ijse.ccz.dao.custom.impl.InventoryDAOImpl;
+import lk.ijse.ccz.dto.InventoryDTO;
+import lk.ijse.ccz.dto.tm.InventoryTm;
 import lk.ijse.ccz.util.Regex;
 
 import java.sql.SQLException;

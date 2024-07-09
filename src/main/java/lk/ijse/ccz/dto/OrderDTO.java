@@ -1,4 +1,4 @@
-package lk.ijse.ccz.model;
+package lk.ijse.ccz.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

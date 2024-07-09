@@ -3,8 +3,7 @@ package lk.ijse.ccz.dao.custom.impl;
 import lk.ijse.ccz.dao.SQLUtill;
 import lk.ijse.ccz.dao.custom.InventoryDAO;
 import lk.ijse.ccz.entity.Inventory;
-import lk.ijse.ccz.entity.OrderDetail;
-import lk.ijse.ccz.model.OrderDetailDTO;
+import lk.ijse.ccz.dto.OrderDetailDTO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

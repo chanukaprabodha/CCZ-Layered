@@ -13,11 +13,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import lk.ijse.ccz.bo.BOFactory;
 import lk.ijse.ccz.bo.custom.EmployeeBO;
-import lk.ijse.ccz.dao.DAOFactory;
-import lk.ijse.ccz.dao.custom.EmployeeDAO;
-import lk.ijse.ccz.model.EmployeeDTO;
-import lk.ijse.ccz.model.tm.EmployeeTm;
-import lk.ijse.ccz.dao.custom.impl.EmployeeDAOImpl;
+import lk.ijse.ccz.dto.EmployeeDTO;
+import lk.ijse.ccz.dto.tm.EmployeeTm;
 import javafx.scene.layout.AnchorPane;
 import lk.ijse.ccz.util.Regex;
 

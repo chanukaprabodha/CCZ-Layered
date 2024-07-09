@@ -10,8 +10,8 @@ import lk.ijse.ccz.dao.custom.OrderDetailDAO;
 import lk.ijse.ccz.db.DbConnection;
 import lk.ijse.ccz.entity.OrderDetail;
 import lk.ijse.ccz.entity.Orders;
-import lk.ijse.ccz.model.OrderDTO;
-import lk.ijse.ccz.model.OrderDetailDTO;
+import lk.ijse.ccz.dto.OrderDTO;
+import lk.ijse.ccz.dto.OrderDetailDTO;
 
 import java.sql.*;
 import java.util.ArrayList;

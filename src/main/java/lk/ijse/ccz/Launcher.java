@@ -12,7 +12,7 @@ public class Launcher extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-       AnchorPane rootNode = FXMLLoader.load(this.getClass().getResource("/view/dashboard_form.fxml"));
+       StackPane rootNode = FXMLLoader.load(this.getClass().getResource("/view/login_form.fxml"));
 
         Scene scene = new Scene(rootNode);
 

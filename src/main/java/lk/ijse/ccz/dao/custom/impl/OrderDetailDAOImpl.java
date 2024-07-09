@@ -2,14 +2,10 @@ package lk.ijse.ccz.dao.custom.impl;
 
 import lk.ijse.ccz.dao.SQLUtill;
 import lk.ijse.ccz.dao.custom.OrderDetailDAO;
-import lk.ijse.ccz.db.DbConnection;
 import lk.ijse.ccz.entity.OrderDetail;
-import lk.ijse.ccz.model.OrderDetailDTO;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class OrderDetailDAOImpl implements OrderDetailDAO {
 

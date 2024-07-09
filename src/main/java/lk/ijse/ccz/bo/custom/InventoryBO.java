@@ -1,12 +1,10 @@
 package lk.ijse.ccz.bo.custom;
 
 import lk.ijse.ccz.bo.SuperBO;
-import lk.ijse.ccz.entity.Inventory;
-import lk.ijse.ccz.model.InventoryDTO;
-import lk.ijse.ccz.model.OrderDetailDTO;
+import lk.ijse.ccz.dto.InventoryDTO;
+import lk.ijse.ccz.dto.OrderDetailDTO;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public interface InventoryBO extends SuperBO {

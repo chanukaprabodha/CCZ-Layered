@@ -3,12 +3,9 @@ package lk.ijse.ccz.bo.custom.impl;
 import lk.ijse.ccz.bo.custom.EmployeeBO;
 import lk.ijse.ccz.dao.DAOFactory;
 import lk.ijse.ccz.dao.custom.EmployeeDAO;
-import lk.ijse.ccz.db.DbConnection;
 import lk.ijse.ccz.entity.Employee;
-import lk.ijse.ccz.model.EmployeeDTO;
+import lk.ijse.ccz.dto.EmployeeDTO;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;

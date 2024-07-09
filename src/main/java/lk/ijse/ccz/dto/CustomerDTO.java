@@ -1,18 +1,17 @@
-package lk.ijse.ccz.model.tm;
+package lk.ijse.ccz.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Data
 
-public class EmployeeTm {
-
-    private String employeeId;
+public class CustomerDTO {
+    private String customerID;
     private String name;
-    private String position;
+    private String email;
     private String address;
     private String contact;
 }

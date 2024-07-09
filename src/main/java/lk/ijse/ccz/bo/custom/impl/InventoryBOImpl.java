@@ -3,13 +3,10 @@ package lk.ijse.ccz.bo.custom.impl;
 import lk.ijse.ccz.bo.custom.InventoryBO;
 import lk.ijse.ccz.dao.DAOFactory;
 import lk.ijse.ccz.dao.custom.InventoryDAO;
-import lk.ijse.ccz.db.DbConnection;
 import lk.ijse.ccz.entity.Inventory;
-import lk.ijse.ccz.model.InventoryDTO;
-import lk.ijse.ccz.model.OrderDetailDTO;
+import lk.ijse.ccz.dto.InventoryDTO;
+import lk.ijse.ccz.dto.OrderDetailDTO;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;

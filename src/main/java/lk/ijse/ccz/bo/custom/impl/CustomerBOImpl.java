@@ -1,12 +1,10 @@
 package lk.ijse.ccz.bo.custom.impl;
 
-import lk.ijse.ccz.bo.BOFactory;
 import lk.ijse.ccz.bo.custom.CustomerBO;
 import lk.ijse.ccz.dao.DAOFactory;
 import lk.ijse.ccz.dao.custom.CustomerDAO;
-import lk.ijse.ccz.dao.custom.impl.CustomerDAOImpl;
 import lk.ijse.ccz.entity.Customer;
-import lk.ijse.ccz.model.CustomerDTO;
+import lk.ijse.ccz.dto.CustomerDTO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

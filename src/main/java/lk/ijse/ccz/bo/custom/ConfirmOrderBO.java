@@ -2,8 +2,8 @@ package lk.ijse.ccz.bo.custom;
 
 import javafx.scene.chart.XYChart;
 import lk.ijse.ccz.bo.SuperBO;
-import lk.ijse.ccz.model.OrderDTO;
-import lk.ijse.ccz.model.OrderDetailDTO;
+import lk.ijse.ccz.dto.OrderDTO;
+import lk.ijse.ccz.dto.OrderDetailDTO;
 
 import java.sql.Date;
 import java.sql.SQLException;
