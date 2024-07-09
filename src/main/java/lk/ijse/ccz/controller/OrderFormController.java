@@ -345,7 +345,7 @@ public class OrderFormController {
 
                 var order = new OrderDTO(orderId, date, cusId, totalAmount);
 
-                List<OrderDetailDTO> odList = new ArrayList<>();
+                ArrayList<OrderDetailDTO> odList = new ArrayList<>();
 
                 for (int i = 0; i < tblOrder.getItems().size(); i++) {
                         OrderTm tm = ordertList.get(i);
@@ -360,11 +360,12 @@ public class OrderFormController {
                 }
 
                 customerName = confirmOrderBO.getCustomerName(cusId);
+
                 customerMailAddress = confirmOrderBO.getCustomerEmail(cusId);
 
 
                 try {
-                        boolean isPlaced = confirmOrderBO.placeOrder(new ConfirmOrder(order, odList));
+                        boolean isPlaced = confirmOrderBO.placeOrder(order, odList);
                         if (isPlaced) {
                                 new Alert(Alert.AlertType.CONFIRMATION, "order placed!").show();
                                 tblOrder.getItems().clear();
@@ -373,6 +374,7 @@ public class OrderFormController {
                                 lblTotal.setText("0");
                                 loadNextOrderId();
                                 new SendMail().sending(date, orderId, totalAmount);
+
                         } else {
                                 new Alert(Alert.AlertType.WARNING, "order not placed!").show();
                         }

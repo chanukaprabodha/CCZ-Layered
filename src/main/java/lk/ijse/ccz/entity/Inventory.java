@@ -13,4 +13,10 @@ public class Inventory {
     private String name;
     private double stock;
     private double price;
+
+    public Inventory(String ingredientId, double ingredientQty) {
+
+        this.id = ingredientId;
+        this.stock = ingredientQty;
+    }
 }

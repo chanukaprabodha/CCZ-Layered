@@ -17,4 +17,5 @@ public interface InventoryDAO extends CrudDAO<Inventory> {
     public  double getUnitPrice(String recipe) throws SQLException, ClassNotFoundException;
 
     public  String getProductId(String cellData) throws SQLException, ClassNotFoundException;
+
 }

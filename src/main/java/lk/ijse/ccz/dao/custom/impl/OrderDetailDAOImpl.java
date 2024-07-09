@@ -13,7 +13,7 @@ import java.util.List;
 
 public class OrderDetailDAOImpl implements OrderDetailDAO {
 
-    public  boolean save(ArrayList<OrderDetail> odList) throws SQLException, ClassNotFoundException {
+    public  boolean save1(ArrayList<OrderDetail> odList) throws SQLException, ClassNotFoundException {
             for (OrderDetail od : odList) {
                 if(!save(od)) {
                     return false;

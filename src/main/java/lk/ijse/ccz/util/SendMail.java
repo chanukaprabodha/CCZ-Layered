@@ -79,8 +79,8 @@ public class SendMail {
         try {
             // Create send message
             msg = service.users().messages().send("me", msg).execute();
-            System.out.println("Message id: " + msg.getId());
-            System.out.println(msg.toPrettyString());
+//            System.out.println("Message id: " + msg.getId());
+//            System.out.println(msg.toPrettyString());
         } catch (GoogleJsonResponseException e) {
             GoogleJsonError error = e.getDetails();
             if (error.getCode() == 403) {

@@ -10,17 +10,16 @@ import lk.ijse.ccz.dao.custom.OrderDetailDAO;
 import lk.ijse.ccz.db.DbConnection;
 import lk.ijse.ccz.entity.OrderDetail;
 import lk.ijse.ccz.entity.Orders;
-import lk.ijse.ccz.model.ConfirmOrder;
 import lk.ijse.ccz.model.OrderDTO;
 import lk.ijse.ccz.model.OrderDetailDTO;
 
 import java.sql.*;
-import java.util.List;
+import java.util.ArrayList;
 
 public class ConfirmOrderBOImpl implements ConfirmOrderBO {
 
     OrderDAO orderDAO = (OrderDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ORDER);
-    OrderDetailDAO orderDetailDAO = (OrderDetailDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.CONFIRM_ORDER);
+    OrderDetailDAO orderDetailDAO = (OrderDetailDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ORDER_DETAIL);
     InventoryDAO inventoryDAO = (InventoryDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.INVENTORY);
     CustomerDAO customerDAO = (CustomerDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.CUSTOMER);
 
@@ -61,28 +60,38 @@ public class ConfirmOrderBOImpl implements ConfirmOrderBO {
         return orderDAO.getMostRecentOrderId();
     }
 
-    public  boolean save(List<OrderDetailDTO> odList) throws SQLException, ClassNotFoundException {
-        return orderDetailDAO.save((OrderDetail) odList);
+    public  boolean save(ArrayList<OrderDetailDTO> odList) throws SQLException, ClassNotFoundException {
+        ArrayList<OrderDetail> orderDetails = new ArrayList<>();
+        for (OrderDetailDTO od : odList) {
+            orderDetails.add(new OrderDetail(od.getOrderId(), od.getIngredientId(), od.getIngredientQty(), od.getUnitPrice()));
+        }
+        return orderDetailDAO.save1(orderDetails);
     }
 
     public   boolean save(OrderDetailDTO od) throws SQLException, ClassNotFoundException {
         return orderDetailDAO.save(new OrderDetail(od.getOrderId(), od.getIngredientId(), od.getIngredientQty(),od.getUnitPrice()));
     }
 
-    public  boolean placeOrder(ConfirmOrder po) throws SQLException {
+    public  boolean placeOrder(OrderDTO dto, ArrayList<OrderDetailDTO> odList) throws SQLException {
+
         Connection connection = DbConnection.getInstance().getConnection();
         connection.setAutoCommit(false);
 
         try {
-            boolean isOrderSaved = orderDAO.save(new Orders(po.getOrderDTO().getOrderId(), po.getOrderDTO().getOrderDate(), po.getOrderDTO().getCustomerID(), po.getOrderDTO().getTotalAmount()));
+            boolean isOrderSaved = orderDAO.save(new Orders(dto.getOrderId(), dto.getOrderDate(), dto.getCustomerID(), dto.getTotalAmount()));
 
             if (isOrderSaved) {
 
-                boolean isOrderDetailSaved = orderDetailDAO.save((OrderDetail) po.getOdList());
+                ArrayList<OrderDetail> odList1 = new ArrayList<>();
+
+                for (OrderDetailDTO od : odList) {
+                    odList1.add(new OrderDetail(dto.getOrderId(), od.getIngredientId(), od.getIngredientQty(),od.getUnitPrice()));
+                }
+                boolean isOrderDetailSaved = orderDetailDAO.save1(odList1);
 
                 if (isOrderDetailSaved) {
 
-                    boolean isItemQtyUpdate = inventoryDAO.updateQty(po.getOdList());
+                    boolean isItemQtyUpdate = inventoryDAO.updateQty(odList);
 
                     if (isItemQtyUpdate) {
 

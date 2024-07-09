@@ -2,13 +2,12 @@ package lk.ijse.ccz.bo.custom;
 
 import javafx.scene.chart.XYChart;
 import lk.ijse.ccz.bo.SuperBO;
-import lk.ijse.ccz.model.ConfirmOrder;
 import lk.ijse.ccz.model.OrderDTO;
 import lk.ijse.ccz.model.OrderDetailDTO;
 
 import java.sql.Date;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.ArrayList;
 
 public interface ConfirmOrderBO extends SuperBO {
 
@@ -30,15 +29,16 @@ public interface ConfirmOrderBO extends SuperBO {
 
     public String getMostRecentOrderId() throws SQLException, ClassNotFoundException;
 
-    public  boolean save(List<OrderDetailDTO> odList) throws SQLException, ClassNotFoundException;
+    public  boolean save(ArrayList<OrderDetailDTO> odList) throws SQLException, ClassNotFoundException;
 
     public   boolean save(OrderDetailDTO od) throws SQLException, ClassNotFoundException ;
 
-    public  boolean placeOrder(ConfirmOrder po) throws SQLException ;
+    public  boolean placeOrder(OrderDTO dto, ArrayList<OrderDetailDTO> odList) throws SQLException ;
 
     String findCustomer(String mobile) throws SQLException, ClassNotFoundException;
 
     String getCustomerName(String cusId) throws SQLException, ClassNotFoundException;
 
     String getCustomerEmail(String cusId) throws SQLException, ClassNotFoundException;
+
 }

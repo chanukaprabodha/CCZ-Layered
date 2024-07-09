@@ -115,8 +115,8 @@ public class DashboardFormController {
 
     public void initialize() throws SQLException, ClassNotFoundException {
         setUserName();
-        //incomeChart();
-        //customerChart();
+        incomeChart();
+        customerChart();
         lblNumOfCustomer();
         lblTodayIncome();
         lblTotalIncome();

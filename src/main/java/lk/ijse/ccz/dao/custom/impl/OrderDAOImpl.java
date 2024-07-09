@@ -13,7 +13,7 @@ public class OrderDAOImpl implements OrderDAO {
 
     public String currentId() throws SQLException, ClassNotFoundException {
 
-        ResultSet rst = SQLUtill.execute("SELECT orderId FROM orders ORDER BY CAST(SUBSTRING(orderId, 2) AS UNSIGNED) DESC LIMIT 1", null);
+        ResultSet rst = SQLUtill.execute("SELECT orderId FROM orders ORDER BY CAST(SUBSTRING(orderId, 2) AS UNSIGNED) DESC LIMIT 1");
 
         if (rst.next()) {
             return rst.getString(1);
@@ -33,7 +33,7 @@ public class OrderDAOImpl implements OrderDAO {
 
     public int getUnitPrice(String recipe) throws SQLException, ClassNotFoundException {
 
-        ResultSet rst = SQLUtill.execute("SELECT price FROM ingredient WHERE ing_name = ?", recipe);
+        ResultSet rst = SQLUtill.execute("SELECT price FROM ingredient WHERE ing_id = ?", recipe);
         if (rst.next()){
             return rst.getInt(1);
         }
@@ -82,7 +82,7 @@ public class OrderDAOImpl implements OrderDAO {
 
     public XYChart.Series incomeChart(XYChart.Series chart) throws SQLException, ClassNotFoundException {
 
-        ResultSet rst = SQLUtill.execute("SELECT orderDate, SUM(totalAmount) FROM orders GROUP BY orderDate ORDER BY TIMESTAMP(orderDate)", chart);
+        ResultSet rst = SQLUtill.execute("SELECT orderDate, SUM(totalAmount) FROM orders GROUP BY orderDate ORDER BY TIMESTAMP(orderDate)");
         while (rst.next()) {
             chart.getData().add(new XYChart.Data<>(rst.getString(1), rst.getFloat(2)));
         }
@@ -104,7 +104,7 @@ public class OrderDAOImpl implements OrderDAO {
 
     public XYChart.Series customerChart(XYChart.Series chart) throws SQLException, ClassNotFoundException {
 
-        ResultSet rst = SQLUtill.execute("SELECT orderDate, COUNT(orderId) FROM orders GROUP BY orderDate ORDER BY TIMESTAMP(orderDate)", chart);
+        ResultSet rst = SQLUtill.execute("SELECT orderDate, COUNT(orderId) FROM orders GROUP BY orderDate ORDER BY TIMESTAMP(orderDate)");
         while (rst.next()) {
             chart.getData().add(new XYChart.Data<>(rst.getString(1), rst.getInt(2)));
         }
